@@ -1,13 +1,13 @@
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import Checkbox from "@mui/material/Checkbox";
+import Checkbox, { CheckboxProps } from "@mui/material/Checkbox";
 import { styled } from "@mui/material/styles";
 import { FC } from "react";
 import { CountryType } from "../../../../country";
 import { CountryArrType } from "..";
+
 const ListBox = styled(List)`
   width: 100%;
   height: 270px;
@@ -32,14 +32,61 @@ const ListBox = styled(List)`
 const ListCustom = styled(ListItem)`
   height: 42px;
 `;
-const CheckboxCustom = styled(Checkbox)`
-  position: relative;
-  left: -15px;
-`;
-const ListItemTextCustom = styled(ListItemText)`
-  position: relative;
-  left: -30px;
-`;
+const BpIcon = styled("span")(({ theme }) => ({
+  borderRadius: 8,
+  border: "none",
+  width: 22,
+  height: 22,
+  backgroundColor: "#ECECEC",
+  padding: 0,
+  ".Mui-focusVisible &": {
+    outline: "2px auto rgba(19,124,189,.6)",
+    outlineOffset: 2,
+  },
+  "input:hover ~ &": {
+    backgroundColor: theme.palette.mode === "dark" ? "#30404d" : "#ebf1f5",
+  },
+  "input:disabled ~ &": {
+    boxShadow: "none",
+    background:
+      theme.palette.mode === "dark"
+        ? "rgba(57,75,89,.5)"
+        : "rgba(206,217,224,.5)",
+  },
+}));
+
+const BpCheckedIcon = styled(BpIcon)({
+  backgroundColor: "#457DF1",
+  backgroundImage:
+    "linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))",
+  "&:before": {
+    display: "block",
+    width: 22,
+    height: 22,
+    backgroundImage:
+      "url(\"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath" +
+      " fill-rule='evenodd' clip-rule='evenodd' d='M12 5c-.28 0-.53.11-.71.29L7 9.59l-2.29-2.3a1.003 " +
+      "1.003 0 00-1.42 1.42l3 3c.18.18.43.29.71.29s.53-.11.71-.29l5-5A1.003 1.003 0 0012 5z' fill='%23fff'/%3E%3C/svg%3E\")",
+    content: '""',
+  },
+  "input:hover ~ &": {
+    backgroundColor: "#106ba3",
+  },
+});
+
+function BpCheckbox(props: CheckboxProps) {
+  return (
+    <Checkbox
+      sx={{
+        ml: -2,
+        "&:hover": { bgcolor: "transparent" },
+      }}
+      checkedIcon={<BpCheckedIcon />}
+      icon={<BpIcon />}
+      {...props}
+    />
+  );
+}
 
 export const ListCountry: FC<{
   filteredCountries: CountryType[];
@@ -64,27 +111,28 @@ export const ListCountry: FC<{
         "empty"
       ) : (
         <>
-          {" "}
           {filteredCountries.map((value) => {
             const labelId = `checkbox-list-label-${value.name}`;
 
             return (
               <ListCustom key={value.name} disablePadding>
                 <ListItemButton
+                sx={{
+                  paddingLeft: '8px'
+                }}
                   role={undefined}
                   onClick={handleToggle(value)}
                   dense
                 >
-                  <ListItemIcon>
-                    <CheckboxCustom
-                      edge="start"
-                      checked={checked.indexOf(value) !== -1}
-                      tabIndex={-1}
-                      disableRipple
-                      inputProps={{ "aria-labelledby": labelId }}
-                    />
-                  </ListItemIcon>
-                  <ListItemTextCustom id={labelId} primary={value.name} />
+                  <BpCheckbox
+                    edge="start"
+                    checked={checked.indexOf(value) !== -1}
+                    tabIndex={-1}
+                    disableRipple
+                    inputProps={{ "aria-labelledby": labelId }}
+                  />
+
+                  <ListItemText id={labelId} primary={value.name} />
                 </ListItemButton>
               </ListCustom>
             );

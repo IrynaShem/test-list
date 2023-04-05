@@ -1,12 +1,64 @@
 import { FC, useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Divider from "@mui/material/Divider";
-import Switch from "@mui/material/Switch";
+import Switch, { SwitchProps } from "@mui/material/Switch";
 import Grid from "@mui/material/Grid";
 import { InputCoutry } from "./InputCoutry";
 import { ListCountry } from "./List";
 import useDebounce from "./useDebounce";
 import { arr, CountryType } from "../../../country";
+import { FormControlLabel } from "@mui/material";
+
+const IOSSwitch = styled((props: SwitchProps) => (
+  <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
+))(({ theme }) => ({
+  width: 42,
+  height: 26,
+  padding: 0,
+  "& .MuiSwitch-switchBase": {
+    padding: 0,
+    margin: 2,
+    transitionDuration: "300ms",
+    "&.Mui-checked": {
+      transform: "translateX(16px)",
+      color: "#fff",
+      "& + .MuiSwitch-track": {
+        backgroundColor: theme.palette.mode === "dark" ? "#2ECA45" : "#65C466",
+        opacity: 1,
+        border: 0,
+      },
+      "&.Mui-disabled + .MuiSwitch-track": {
+        opacity: 0.5,
+      },
+    },
+    "&.Mui-focusVisible .MuiSwitch-thumb": {
+      color: "#33cf4d",
+      border: "6px solid #fff",
+    },
+    "&.Mui-disabled .MuiSwitch-thumb": {
+      color:
+        theme.palette.mode === "light"
+          ? theme.palette.grey[100]
+          : theme.palette.grey[600],
+    },
+    "&.Mui-disabled + .MuiSwitch-track": {
+      opacity: theme.palette.mode === "light" ? 0.7 : 0.3,
+    },
+  },
+  "& .MuiSwitch-thumb": {
+    boxSizing: "border-box",
+    width: 22,
+    height: 22,
+  },
+  "& .MuiSwitch-track": {
+    borderRadius: 26 / 2,
+    backgroundColor: theme.palette.mode === "light" ? "#E9E9EA" : "#39393D",
+    opacity: 1,
+    transition: theme.transitions.create(["background-color"], {
+      duration: 500,
+    }),
+  },
+}));
 
 export type CountryArrType = (CountryType | number)[];
 const Wrapper = styled("div")`
@@ -14,7 +66,6 @@ const Wrapper = styled("div")`
   margin-top: 50px;
   position: relative;
   width: 494px;
-  height: 446px;
 
   background: #ffffff;
   border: 1px solid #e1e3e6;
@@ -96,7 +147,7 @@ const ContainerMain = styled("div")`
   align-items: center;
   justify-content: center;
 `;
-const label = { inputProps: { "aria-label": "Switch demo" } };
+
 export const CountryPopup: FC<{}> = () => {
   const [checked, setChecked] = useState(false);
   const [checkedList, setCheckedList] = useState<CountryArrType>([0]);
@@ -131,26 +182,37 @@ export const CountryPopup: FC<{}> = () => {
   return (
     <ContainerMain>
       <Wrapper>
-        <Grid container spacing={1}>
-          <Grid xs={12}>
+        <Grid container>
+          <Grid item xs={12} sx={{
+            paddingBottom: '10px'
+          }}>
             <InputCoutry value={value} onChange={onChange} />
             <DividerCustom />
           </Grid>
 
-          <Grid xs={6}>
+          <Grid item xs={6}>
             <WrappSelectedSwitch>
-              <Switch {...label} checked={checked} onChange={switchHandler} />
-              Show selected only
+              <FormControlLabel
+                control={
+                  <IOSSwitch
+                    checked={checked}
+                    onChange={switchHandler}
+                    sx={{ m: 1, ml: 2.3 }}
+                  />
+                }
+                label="Show selected only"
+                sx={{fontSize: '200px'}}
+              />
             </WrappSelectedSwitch>
           </Grid>
-          <Grid xs={6} alignItems="start" justifyContent="flex-end">
+          <Grid item xs={6} alignItems="start" justifyContent="flex-end">
             <WrappClear>
               <div className="clear" onClick={() => clearList()}>
-                clear all
+                Clear all
               </div>
             </WrappClear>
           </Grid>
-          <Grid xs={12}>
+          <Grid item xs={12}>
             <ListCountry
               filteredCountries={checked ? checkedListOnly : filteredCountries}
               checked={checkedList}
@@ -158,7 +220,7 @@ export const CountryPopup: FC<{}> = () => {
             />
             <DividerCustom />
           </Grid>
-          <Grid xs={12}>
+          <Grid item xs={12}>
             <WrappSave>
               <SaveBtn>Save</SaveBtn>
             </WrappSave>

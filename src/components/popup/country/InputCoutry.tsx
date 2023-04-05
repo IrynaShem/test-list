@@ -12,6 +12,7 @@ const InputCustom = styled("input")`
   letter-spacing: -0.5px;
   width: 100%;
   color: #343434;
+  padding: 0;
 `;
 export const InputCoutry: FC<{
   value: string;
