@@ -129,9 +129,9 @@ const SaveBtn = styled("div")`
 
   background: #60d09b;
   border-radius: 50px;
-  font-family: "Campton-Book";
+  font-family: 'Campton', sans-serif;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 16px;
   line-height: 22px;
 

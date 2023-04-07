@@ -1,6 +1,6 @@
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
+import { Box } from "@mui/material";
 import ListItemText from "@mui/material/ListItemText";
 import Checkbox, { CheckboxProps } from "@mui/material/Checkbox";
 import { styled } from "@mui/material/styles";
@@ -32,6 +32,14 @@ const ListBox = styled(List)`
 const ListCustom = styled(ListItem)`
   height: 42px;
 `;
+const ItemWrap = styled(Box)({
+  paddingLeft: '8px',
+  width: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '5px'
+});
+
 const BpIcon = styled("span")(({ theme }) => ({
   borderRadius: 8,
   border: "none",
@@ -116,14 +124,7 @@ export const ListCountry: FC<{
 
             return (
               <ListCustom key={value.name} disablePadding>
-                <ListItemButton
-                sx={{
-                  paddingLeft: '8px'
-                }}
-                  role={undefined}
-                  onClick={handleToggle(value)}
-                  dense
-                >
+                <ItemWrap onClick={handleToggle(value)}>
                   <BpCheckbox
                     edge="start"
                     checked={checked.indexOf(value) !== -1}
@@ -133,7 +134,7 @@ export const ListCountry: FC<{
                   />
 
                   <ListItemText id={labelId} primary={value.name} />
-                </ListItemButton>
+                </ItemWrap>
               </ListCustom>
             );
           })}
